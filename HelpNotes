@@ -1,2 +1,5 @@
 Streaming lib Path: /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.4.0.jar
+
 Download from Swift: wget http://smog.uppmax.uu.se:8080/swift/v1/GenomeData/"filename" -O "output-file-name"
+
+Test Results: samtools view *chrom20*.bam | awk -F'\t' 'function abs(x){return ((x<0.0)?-x:x)} {if(abs($9)>1000) print$0}' > *output*.txt
