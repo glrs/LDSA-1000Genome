@@ -3,3 +3,10 @@ Streaming lib Path: /usr/local/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.
 Download from Swift: wget http://smog.uppmax.uu.se:8080/swift/v1/GenomeData/"filename" -O "output-file-name"
 
 Test Results: samtools view *chrom20*.bam | awk -F'\t' 'function abs(x){return ((x<0.0)?-x:x)} {if(abs($9)>1000) print$0}' > *output*.txt
+
+Compile: mvn clean package
+
+hadoop jar target/*-jar-with-dependencies.jar org.seqdoop.hadoop_bam.examples.TestBAM "file:/input_file_path" </output>
+
+Full Path: /home/ubuntu/hadoop-bam-7.0.0/examples/
+
