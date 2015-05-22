@@ -10,3 +10,6 @@ hadoop jar target/*-jar-with-dependencies.jar org.seqdoop.hadoop_bam.examples.Te
 
 Full Path: /home/ubuntu/hadoop-bam-7.0.0/examples/
 
+hadoop dfs -copyToLocal "/test*" ./"outputFileName"
+
+samtools view "outputFileName" | less
