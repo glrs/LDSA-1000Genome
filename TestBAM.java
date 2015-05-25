@@ -82,9 +82,9 @@ public class TestBAM extends Configured implements Tool {
       job.setInputFormatClass(AnySAMInputFormat.class);
       job.setOutputFormatClass(TestBAM.MyOutputFormat.class);
 
-      org.apache.hadoop.mapreduce.lib.input.FileInputFormat.addInputPath(job, new Path(args[0]));
+      org.apache.hadoop.mapreduce.lib.input.FileInputFormat.addInputPath(job, new Path(args[1]));
 
-      org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.setOutputPath(job, new Path(args[1]));
+      org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.setOutputPath(job, new Path(args[2]));
       job.submit();
 
       if (!job.waitForCompletion(true)) {
@@ -97,8 +97,8 @@ public class TestBAM extends Configured implements Tool {
   
   
   public static void main(String[] args) throws Exception {
-    if (args.length != 2) {
-        System.out.printf("Usage: hadoop jar <name.jar> %s <input.bam> <output_directory>\n", TestBAM.class.getCanonicalName());
+    if (args.length != 3) {
+        System.out.printf("Usage: hadoop jar <name.jar> %s <header.txt> <input.bam> <output_directory>\n", TestBAM.class.getCanonicalName());
         System.exit(0);
     }
 
