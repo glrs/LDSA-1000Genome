@@ -13,3 +13,10 @@ Full Path: /home/ubuntu/hadoop-bam-7.0.0/examples/
 hadoop dfs -copyToLocal "/test*" ./"outputFileName"
 
 samtools view "outputFileName" | less
+
+Write header from .BAM into text file:
+hadoop jar target/hadoop-bam-7.0.0-jar-with-dependencies.jar view -H /path/file.bam > header.txt
+
+Run Job with 3 arguments [header.txt input_path/ output_path]:
+hadoop jar target/*-jar-with-dependencies.jar org.seqdoop.hadoop_bam.examples.TestBAM "file:/header.txt" /bam_folder/*.bam /output_folder
+
