@@ -50,6 +50,8 @@ import org.seqdoop.hadoop_bam.FileVirtualSplit;
  * Usage: hadoop jar target/*-jar-with-dependencies.jar org.seqdoop.hadoop_bam.examples.TestBAM \
  *     <input.bam> <output_directory>
  */
+public String header_path = "path";
+ 
 public class TestBAM extends Configured implements Tool {
 
   static class MyOutputFormat extends KeyIgnoringBAMOutputFormat<NullWritable> {
@@ -58,7 +60,7 @@ public class TestBAM extends Configured implements Tool {
       @Override
       public RecordWriter<NullWritable, SAMRecordWritable> getRecordWriter(TaskAttemptContext ctx) throws IOException {
           final Configuration conf = ctx.getConfiguration();
-          readSAMHeaderFrom(new Path(conf.get(HEADER_FROM_FILE)), conf);
+          readSAMHeaderFrom(new Path(header_path), conf);
           return super.getRecordWriter(ctx);
       }
   }
@@ -66,7 +68,7 @@ public class TestBAM extends Configured implements Tool {
   public int run(String[] args) throws Exception {
       final Configuration conf = getConf();
 
-      conf.set(MyOutputFormat.HEADER_FROM_FILE, args[0]);
+      //conf.set(MyOutputFormat.HEADER_FROM_FILE, args[0]);
 
       final Job job = new Job(conf);
 
@@ -82,9 +84,9 @@ public class TestBAM extends Configured implements Tool {
       job.setInputFormatClass(AnySAMInputFormat.class);
       job.setOutputFormatClass(TestBAM.MyOutputFormat.class);
 
-      org.apache.hadoop.mapreduce.lib.input.FileInputFormat.addInputPath(job, new Path(args[1]));
+      org.apache.hadoop.mapreduce.lib.input.FileInputFormat.addInputPath(job, new Path(args[0]));
 
-      org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.setOutputPath(job, new Path(args[2]));
+      org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.setOutputPath(job, new Path(args[1]));
       job.submit();
 
       if (!job.waitForCompletion(true)) {
@@ -97,8 +99,8 @@ public class TestBAM extends Configured implements Tool {
   
   
   public static void main(String[] args) throws Exception {
-    if (args.length != 3) {
-        System.out.printf("Usage: hadoop jar <name.jar> %s <header.txt> <input.bam> <output_directory>\n", TestBAM.class.getCanonicalName());
+    if (args.length != 2) {
+        System.out.printf("Usage: hadoop jar <name.jar> %s <input.bam> <output_directory>\n", TestBAM.class.getCanonicalName());
         System.exit(0);
     }
 
@@ -123,6 +125,7 @@ final class TestBAMMapper
 
     {
         final SAMRecord record = wrec.get();
+        	header_path = fileName;
 		if(record.getInferredInsertSize() > 1000 || record.getInferredInsertSize() < -1000){
 			//System.out.println(record.toString());
 			record.setReadName(fileName);
