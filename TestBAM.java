@@ -36,6 +36,9 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import htsjdk.samtools.SAMRecord;
+import htsjdk.samtools.CigarOperator;
+import htsjdk.samtools.CigarElement;
+import htsjdk.samtools.Cigar;
 
 import org.seqdoop.hadoop_bam.AnySAMInputFormat;
 import org.seqdoop.hadoop_bam.KeyIgnoringBAMOutputFormat;
@@ -43,22 +46,18 @@ import org.seqdoop.hadoop_bam.SAMRecordWritable;
 
 import org.seqdoop.hadoop_bam.FileVirtualSplit;
 import org.seqdoop.hadoop_bam.BAMOutputFormat;
-//import org.apache.hadoop.mapreduce.JobConf;
-import org.apache.hadoop.mapred.JobConf;
 
 /**
  * Simple example that reads a BAM (or SAM) file, groups reads by their name and writes the
  * output again as BAM file. Note that both the file and its index must be present.
  *
  * Usage: hadoop jar target/*-jar-with-dependencies.jar org.seqdoop.hadoop_bam.examples.TestBAM \
- *     <input.bam> <output_directory>
+ *     <header.txt> <input.bam> <output_directory>
  */
 public class TestBAM extends Configured implements Tool {
 
   static class MyOutputFormat extends KeyIgnoringBAMOutputFormat<NullWritable> {
       public final static String HEADER_FROM_FILE = "TestBAM.header";
-	  //super.writeHeader = false;
-	  //return this.setWriteHeader(false);
 	 
       @Override
       public RecordWriter<NullWritable, SAMRecordWritable> getRecordWriter(TaskAttemptContext ctx) throws IOException {
@@ -71,25 +70,9 @@ public class TestBAM extends Configured implements Tool {
 
   public int run(String[] args) throws Exception {
       final Configuration conf = getConf();
-	  //MyOutputFormat mo = new MyOutputFormat();
-	  //mo.setWriteHeader(false);
+      
       conf.set(MyOutputFormat.HEADER_FROM_FILE, args[0]);
-	  //conf.set(BAMOutputFormat, args[0]);
-
       final Job job = new Job(conf);
-	  
-	  /*JobConf job = new JobConf(TestBAM.class);
-	  job.setJobName("Bam-naoum");
-	  
-	  job.setOutputKeyClass(Text.class);
-	  job.setOutputValueClass(SAMRecordWritable.class);
-	  job.setMapperClass(TestBAMMapper.class);
-	  job.setReducerClass(TestBAMReducer.class);
-	  job.setInputFormat(AnySAMInputFormat.class);
-	  job.setOutputFormat(BAMOutputFormat.class);
-	  FileInputFormat.setInputPaths(job, new Path(args[0]));
-	  FileOutputFormat.setOutputPath(job, new Path(args[1]));
-	  JobClient.runJob(job);*/
 
       job.setJarByClass(TestBAM.class);
       job.setMapperClass (TestBAMMapper.class);
@@ -102,7 +85,6 @@ public class TestBAM extends Configured implements Tool {
 
       job.setInputFormatClass(AnySAMInputFormat.class);
       job.setOutputFormatClass(TestBAM.MyOutputFormat.class);
-	  //job.setOutputFormatClass(KeyIgnoringBAMOutputFormat.class);
 
       org.apache.hadoop.mapreduce.lib.input.FileInputFormat.setInputPaths(job, new Path(args[1]));
 
@@ -146,12 +128,16 @@ final class TestBAMMapper
     {
         final SAMRecord record = wrec.get();
 		if(record.getInferredInsertSize() > 1000 || record.getInferredInsertSize() < -1000){
-			//System.out.println(record.toString());
-			//String[] fields = fileName.split(".", 8);
-			//String temp = fields[4] + "." + fields[0] + "." + record.getReadName().toString();
-			record.setReadName(fileName.substring(0,8) + fileName.substring(29,33) +record.getReadName());
-			wrec.set(record);
-			ctx.write(new Text(Integer.toString(wrec.get().getInferredInsertSize())), wrec);
+			for(int i = 0; i < record.getCigar().numCigarElements(); i++){
+				if(record.getCigar().getCigarElement(i).getOperator().toString().equals("M")){
+					if(record.getCigar().getCigarElement(i).getLength() >= 80){
+						record.setReadName(fileName.substring(29,33) + fileName.substring(0,8) +record.getReadName());
+						wrec.set(record);
+						ctx.write(new Text(Integer.toString(wrec.get().getInferredInsertSize())), wrec);
+						break;
+					}
+				}
+			}
 		}
     }
 }
@@ -169,7 +155,6 @@ final class TestBAMReducer
 
         while (it.hasNext()) {
             SAMRecordWritable a = it.next();
-            //System.out.println("writing; " + a.get().toString());
             ctx.write(key, a);
         }
     }
