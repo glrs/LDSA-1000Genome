@@ -34,6 +34,12 @@ __Figure 1.__ A verage fragment length per population (green Asians, blue Europe
 
 __Figure 2.__ World map representation of the fragment length average per population.
 
+
+![alt tag](https://github.com/glrs/LDSA-1000Genome/blob/master/Figures/scalability.png)
+
+__Figure 3.__ Scalability test plot, representing the running time in correspondence to the number of nodes (1-3) used.
+
+
 # References
 Niemenmaa, M., Kallio, A., Schumacher, A., Klemelä, P., Korpelainen, E., & Heljanko, K. (2012). HadoopBAM: directly manipulating next generation sequencing data in the cloud. Bioinformatics , 28 (6), 876-877.
 
