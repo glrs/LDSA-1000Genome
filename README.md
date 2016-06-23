@@ -25,15 +25,18 @@ For more: https://github.com/HadoopGenomics/Hadoop-BAM
 The infrastructure we used was an OpenStack cloud system that offers live nodes running Hadoop (v1.2.1). Each node used the computational power of 4 VCPUs, had 8GB of RAM, and Hard Disk capacity of 80GB. We enriched our instances with Hadoop-BAM (v7.0.0) and Samtools, in order to be able to analyse our data and view the results.
 
 # Results
-The resulting data are consisted of one BAM file per population that contains all the reads with insert size higher than 1000 and an alignment quality of more than 80M. From that data, the number of reads for each population was calculated and a basic analysis was performed, comparing the average total number of reads per population as well as grouping the populations using colorcode based on origin. The insert size (fragment length) is in log scale and there is a minimum/maximum representation per population, on top of each bar.
+The resulting data are consisted of one BAM file per population that contains all the reads with insert size (fragment length) higher than 1000, and an alignment quality of more than 80M. From that data, the number of reads for each population was calculated and a basic analysis was performed, comparing the average total number of reads per population, as well as grouping the populations using colorcode based on the origin. In Figure 1, we can see the average insert size presented with bars (in log scale), and a minimum/maximum representation per population.
 
 ![alt tag](https://github.com/glrs/LDSA-1000Genome/blob/master/Figures/LDSA-FinalLog.png)
-__Figure 1.__ A verage fragment length per population (green Asians, blue Europeans, red Africans, purple Americans and yellow Middle Easterns).
+__Figure 1.__ Average fragment length per population (green Asians, blue Europeans, red Africans, purple Americans and yellow Middle Easterns).
+
+Using the average fragment lengths, a spatial representation of the results is also introduced on the world map, pinning the populations in their place of origin and converting the average values to circle radii for each one of them.
 
 ![alt tag](https://github.com/glrs/LDSA-1000Genome/blob/master/Figures/WorldMapPlot.png)
 
-__Figure 2.__ World map representation of the fragment length average per population.
+__Figure 2.__ World map representation of the fragment average length per population.
 
+Following the sample analysis, the scalability results provide an insight on the scaling prospects of the solution. A negative correlation between the nodes and the running time is aparent, confirming the solution’s scalability. The scalability test could be expanded to further increase its reliability by adding more test runs with higher node clusters on the same data. However, since this was a course project, we didn't have the time and the resources to try it.
 
 ![alt tag](https://github.com/glrs/LDSA-1000Genome/blob/master/Figures/scalability.png)
 
