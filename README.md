@@ -31,7 +31,8 @@ The resulting data are consisted of one BAM file per population that contains al
 __Figure 1.__ A verage fragment length per population (green Asians, blue Europeans, red Africans, purple Americans and yellow Middle Easterns).
 
 ![alt tag](https://github.com/glrs/LDSA-1000Genome/blob/master/Figures/WorldMapPlot.png)
- __Figure 2.__ World map representation of the fragment length average per population.
+
+__Figure 2.__ World map representation of the fragment length average per population.
 
 # References
 Niemenmaa, M., Kallio, A., Schumacher, A., Klemelä, P., Korpelainen, E., & Heljanko, K. (2012). HadoopBAM: directly manipulating next generation sequencing data in the cloud. Bioinformatics , 28 (6), 876-877.
