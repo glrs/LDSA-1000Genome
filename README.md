@@ -27,7 +27,11 @@ The infrastructure we used was an OpenStack cloud system that offers live nodes 
 # Results
 The resulting data are consisted of one BAM file per population that contains all the reads with insert size higher than 1000 and an alignment quality of more than 80M. From that data, the number of reads for each population was calculated and a basic analysis was performed, comparing the average total number of reads per population as well as grouping the populations using colorcode based on origin. The insert size (fragment length) is in log scale and there is a minimum/maximum representation per population, on top of each bar.
 
-![alt tag](LDSA-1000Genome/Figures/LDSA-FinalLog.png)
+![alt tag](https://github.com/glrs/LDSA-1000Genome/blob/master/Figures/LDSA-FinalLog.png)
+__Figure 1.__ A verage fragment length per population (green Asians, blue Europeans, red Africans, purple Americans and yellow Middle Easterns).
+
+![alt tag](https://github.com/glrs/LDSA-1000Genome/blob/master/Figures/WorldMapPlot.png)
+__Figure 2.__ World map representation of the fragment length average per population.
 
 # References
 Niemenmaa, M., Kallio, A., Schumacher, A., Klemelä, P., Korpelainen, E., & Heljanko, K. (2012). HadoopBAM: directly manipulating next generation sequencing data in the cloud. Bioinformatics , 28 (6), 876-877.
